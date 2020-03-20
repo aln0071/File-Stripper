@@ -36,7 +36,7 @@ public class Encode {
 	}
 	
 	public static void main(String args[]) {
-		if(args.length != 0) {
+		if(args.length != 2) {
 			System.out.println("Usage: java Encode pathToCompressedFile splitSizeInBytes");
 			System.exit(0);
 		}
