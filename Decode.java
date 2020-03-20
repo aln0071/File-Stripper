@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.nio.file.*;
-public class Integrate {
+public class Decode {
 	static String data = "";
 
 	public static void integrate(String path) {
@@ -48,7 +48,19 @@ public class Integrate {
 		}
 		return number;
 	}
+
+	static void showHelpMessage() {
+		System.out.println("Usage: Decode <path> <name_of_output>");
+		System.out.println("This program has two mandatory parameters");
+		System.out.println("\npath - this is the path to the data folder which contains all the .json encoded files");
+		System.out.println("\nname_of_output - this is the name of the output file. Example - test.bin");
+	}
+
 	public static void main(String[] args) {
+		if(args.length != 2) {
+			showHelpMessage();
+			System.exit(0);
+		}
 		try {
 			integrate(args[0]);
 			decode(data, args[1]);
