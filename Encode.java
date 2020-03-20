@@ -34,10 +34,41 @@ public class Encode {
 		fout.write(Base64.getDecoder().decode(data));
 		fout.close();
 	}
+
+	private static void delete(File file) throws IOException {
+		for(File childFile : file.listFiles()) {
+			if(childFile.isDirectory()) {
+				delete(childFile);
+			} else if(!childFile.delete()) {
+				throw new IOException();
+			}
+		}
+		if(!file.delete()) {
+			throw new IOException();
+		}
+	}
+
+	private static void printHelp() {
+		System.out.println("Usage: java Encode path size");
+				System.out.println("\nThis program has two mandatory parameters.");
+				System.out.println("path : this is the path to the .bin compressed file");
+				System.out.println("size : (number of bytes) the encoded output will be splitted into equally sized files less than this size. Example - 102400");
+				System.exit(0);
+	}
 	
 	public static void main(String args[]) {
 		try {
-			splitter(encode("test.bin").getBytes(), 102400);
+			if(args.length != 2 || !args[0].endsWith(".bin")) {
+				printHelp();
+			}
+			int size = Integer.parseInt(args[1]);
+			try {
+				delete(new File("./data"));
+			} catch(IOException e) {
+				
+			}
+			new File("./data/").mkdirs();
+			splitter(encode(args[0]).getBytes(), size);
 			broken.forEach((k, v)-> {
 				try {
 					writeStringToFile(new String(v), "data/data"+k+".json");
@@ -47,6 +78,9 @@ public class Encode {
 			});
 		} catch(Exception e) {
 			e.printStackTrace();
+			if(e instanceof NumberFormatException) {
+				printHelp();
+			}
 		}
 	}
 }
